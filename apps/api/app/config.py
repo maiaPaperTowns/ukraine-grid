@@ -1,5 +1,6 @@
 from typing import Optional
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -8,6 +9,17 @@ class Settings(BaseSettings):
 
     database_url: str = "postgresql+psycopg://ukrainegrid:ukrainegrid@localhost:5432/ukrainegrid"
     cors_allowed_origins: str = "http://localhost:3000"
+
+    @field_validator("database_url")
+    @classmethod
+    def _use_psycopg_driver(cls, v: str) -> str:
+        # Managed providers (Railway, Render, etc.) hand out bare
+        # "postgresql://..." URLs - SQLAlchemy needs the +psycopg dialect
+        # suffix to pick the driver this project installs (psycopg3, not the
+        # legacy psycopg2 SQLAlchemy defaults to otherwise).
+        if v.startswith("postgresql://"):
+            return "postgresql+psycopg://" + v[len("postgresql://"):]
+        return v
 
     # Simulated outage engine - see app/services/outage_simulator.py. Every
     # response/WS payload this produces is honesty-labeled `simulated: true`;
