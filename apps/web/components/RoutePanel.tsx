@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { useGridStore } from "../lib/store";
 import { FACILITY_TYPE_LABELS } from "../lib/constants";
 
@@ -10,6 +11,7 @@ export default function RoutePanel() {
   const routeStale = useGridStore((s) => s.routeStale);
   const isOffline = useGridStore((s) => s.isOffline);
   const requestRecompute = useGridStore((s) => s.requestRecompute);
+  const setOrigin = useGridStore((s) => s.setOrigin);
 
   if (!origin) {
     return (
@@ -21,7 +23,22 @@ export default function RoutePanel() {
   }
 
   if (routeError) {
-    return <p style={{ fontSize: 13, color: "#fca5a5", margin: 0 }}>{routeError}</p>;
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+          <span style={{ fontSize: 16, lineHeight: "18px" }}>🧭</span>
+          <p style={{ fontSize: 13, color: "#e2e8f0", margin: 0 }}>{routeError}</p>
+        </div>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          <button onClick={() => setOrigin(null)} style={secondaryButtonStyle}>
+            Pick a different spot
+          </button>
+          <button onClick={requestRecompute} style={secondaryButtonStyle}>
+            Try again
+          </button>
+        </div>
+      </div>
+    );
   }
 
   if (!route) {
@@ -63,3 +80,13 @@ export default function RoutePanel() {
     </div>
   );
 }
+
+const secondaryButtonStyle: CSSProperties = {
+  padding: "6px 10px",
+  borderRadius: 8,
+  border: "1px solid #334155",
+  background: "#1e293b",
+  color: "#e2e8f0",
+  fontSize: 12,
+  cursor: "pointer",
+};

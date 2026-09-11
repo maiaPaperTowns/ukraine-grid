@@ -211,9 +211,17 @@ export default function MapView() {
       } catch (err) {
         if (cancelled) return;
         if (err instanceof RouteNotFoundError) {
-          setRoute(null, "No reachable powered facility found from this origin.");
+          setRoute(
+            null,
+            "Every nearby facility is either unpowered or cut off by a simulated blockage right now. " +
+              "Try a different type of facility, or pick a spot a little further out."
+          );
         } else {
-          setRoute(null, "Failed to compute route - check that the API is reachable.");
+          setRoute(
+            null,
+            "Couldn't reach the routing service. If you're running this locally, make sure the " +
+              "backend is up (docker compose up) - otherwise this is probably a brief connection hiccup."
+          );
         }
       }
     })();

@@ -11,6 +11,7 @@ node_modules/
 .next/
 out/
 next-env.d.ts
+*.tsbuildinfo
 
 # next-pwa generated service worker output (regenerated on every build; the
 # dev server has PWA disabled so these only appear after `next build`)
