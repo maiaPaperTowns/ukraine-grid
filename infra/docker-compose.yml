@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: ukrainegrid
+      POSTGRES_PASSWORD: ukrainegrid
+      POSTGRES_DB: ukrainegrid
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ukrainegrid"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ..
+      dockerfile: apps/api/Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg://ukrainegrid:ukrainegrid@db:5432/ukrainegrid
+      CORS_ALLOWED_ORIGINS: http://localhost:3000
+      UVICORN_RELOAD: "true"
+      OUTAGE_TICK_SECONDS: "20"
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ../apps/api/app:/workspace/apps/api/app
+
+  web:
+    build:
+      context: ..
+      dockerfile: apps/web/Dockerfile
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+      NEXT_PUBLIC_WS_BASE_URL: ws://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    volumes:
+      - ../apps/web:/workspace/app
+      - web_node_modules:/workspace/app/node_modules
+
+volumes:
+  db_data:
+  web_node_modules:

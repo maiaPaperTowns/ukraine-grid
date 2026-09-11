@@ -1,0 +1,24 @@
+{
+  "bbox": {
+    "west": 30.495,
+    "south": 50.43,
+    "east": 30.55,
+    "north": 50.468
+  },
+  "description": "Central Kyiv (Maidan Nezalezhnosti / Pechersk) drive network + facilities",
+  "fetched_at": "2026-09-11T05:42:06.192031+00:00",
+  "osmnx_version": "2.0.7",
+  "counts": {
+    "road_nodes": 446,
+    "road_edges": 904,
+    "facilities": 38,
+    "facilities_by_type": {
+      "hospital": 17,
+      "shelter": 5,
+      "charging_heating": 16
+    },
+    "synthetic_facilities": 5
+  },
+  "attribution": "\u00a9 OpenStreetMap contributors, ODbL 1.0 (https://www.openstreetmap.org/copyright)",
+  "synthetic_note": "Road network and the large majority of facilities are real OSM data. A small number of shelter points may be synthesized (see is_synthetic=true on individual facility features) only when OSM's shelter coverage in this bbox is sparse; live outage/power status shown by the app is ALWAYS simulated, never real-time, regardless of whether the underlying facility is real or synthetic."
+}

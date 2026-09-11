@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.venv-*/
+*.egg-info/
+.pytest_cache/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+next-env.d.ts
+
+# next-pwa generated service worker output (regenerated on every build; the
+# dev server has PWA disabled so these only appear after `next build`)
+apps/web/public/sw.js
+apps/web/public/swe-worker-*.js
+apps/web/public/workbox-*.js
+
+# Env
+.env
+.env.local
+
+# osmnx's local Overpass response cache (created at repo root when
+# scripts/build_osm_extract.py is run) - regenerable, not needed in git.
+/cache/
+
+# OS
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
