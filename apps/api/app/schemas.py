@@ -87,6 +87,7 @@ class HealthOut(BaseModel):
     road_nodes: int
     road_edges: int
     facilities: int
+    demo_mode: bool = False
 
 
 class StatsOut(BaseModel):

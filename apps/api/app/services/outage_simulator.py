@@ -41,6 +41,15 @@ def decide_new_state(current_ratio: float, target_ratio: float, rng: random.Rand
     return rng.random() < 0.75 if bias_toward_true else rng.random() < 0.25
 
 
+def pick_block_reason(rng: random.Random) -> str:
+    return rng.choice([
+        "simulated road damage",
+        "simulated bridge inaccessible",
+        "simulated debris blocking route",
+        "simulated flooding",
+    ])
+
+
 class OutageSimulator:
     def __init__(
         self,
@@ -172,9 +181,4 @@ class OutageSimulator:
         }
 
     def _pick_block_reason(self) -> str:
-        return self.rng.choice([
-            "simulated road damage",
-            "simulated bridge inaccessible",
-            "simulated debris blocking route",
-            "simulated flooding",
-        ])
+        return pick_block_reason(self.rng)

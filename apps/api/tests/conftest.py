@@ -17,7 +17,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from app.deps import get_connection_manager, get_db_session, get_facilities, get_routable_graph
+from app.deps import (
+    get_connection_manager,
+    get_db_session,
+    get_facilities,
+    get_routable_graph,
+    get_ws_connection_manager,
+    get_ws_facilities,
+    get_ws_routable_graph,
+)
 from app.main import app
 from app.models import OutageEvent
 from app.routing.graph_builder import build_graph
@@ -59,9 +67,13 @@ def client(rg, facilities, sqlite_session_factory):
         finally:
             session.close()
 
+    connections = ConnectionManager()
     app.dependency_overrides[get_routable_graph] = lambda: rg
     app.dependency_overrides[get_facilities] = lambda: facilities
-    app.dependency_overrides[get_connection_manager] = lambda: ConnectionManager()
+    app.dependency_overrides[get_connection_manager] = lambda: connections
+    app.dependency_overrides[get_ws_routable_graph] = lambda: rg
+    app.dependency_overrides[get_ws_facilities] = lambda: facilities
+    app.dependency_overrides[get_ws_connection_manager] = lambda: connections
     app.dependency_overrides[get_db_session] = _get_db_session
 
     # Deliberately NOT entered as `with TestClient(app) as c:` - that would run

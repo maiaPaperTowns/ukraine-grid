@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
 
-from ..deps import get_connection_manager, get_facilities, get_routable_graph
+from ..deps import get_ws_connection_manager, get_ws_facilities, get_ws_routable_graph
 from ..routing.graph_builder import RoutableGraph
 from ..services.connection_manager import ConnectionManager
 
@@ -31,9 +31,9 @@ def _snapshot(rg: RoutableGraph, facilities: list[dict]) -> dict:
 @router.websocket("/ws/outages")
 async def outages_ws(
     websocket: WebSocket,
-    connections: ConnectionManager = Depends(get_connection_manager),
-    rg: RoutableGraph = Depends(get_routable_graph),
-    facilities: list[dict] = Depends(get_facilities),
+    connections: ConnectionManager = Depends(get_ws_connection_manager),
+    rg: RoutableGraph = Depends(get_ws_routable_graph),
+    facilities: list[dict] = Depends(get_ws_facilities),
 ):
     await connections.connect(websocket)
     try:
